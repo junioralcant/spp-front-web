@@ -19,7 +19,7 @@ const Dashboard = ({ history }) => {
     },
     {
       title: 'Despesa Extra',
-      page: '/despesaExtra',
+      page: '/despesa-extra',
     },
     {
       title: 'Hospedagem',
