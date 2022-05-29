@@ -13,18 +13,20 @@ import inputValueMask from '../../components/inputValueMask';
 import Loader from '../../components/Loader';
 import inputNumber from '../../components/inputNumber/index';
 
-const Abastecimento = ({ history }) => {
+const Pecas = ({ history }) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [veiculo, setVeiculo] = useState('');
+  const [nomePeca, setNomePeca] = useState('');
   const [nomeLinha, setNomeLinha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
-  const [litros, setLitros] = useState('');
+  const [quantidade, setQuantidade] = useState('');
   const [valorUnitario, setValorUnitario] = useState('');
+  const [desconto, setDesconto] = useState('');
+  const [veiculo, setVeiculo] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -51,10 +53,18 @@ const Abastecimento = ({ history }) => {
 
         data.append('file', pickerResponse);
 
-        data.append('litros', litros);
+        data.append('quantidade', quantidade);
+        data.append('nomePeca', nomePeca);
         data.append('veiculo', veiculo);
         data.append('nomeLinha', nomeLinha);
         data.append('descricao', descricao);
+        data.append(
+          'desconto',
+          desconto
+            .replace('R$ ', '')
+            .replace('.', '')
+            .replace(',', '.')
+        );
         data.append(
           'valorUnitario',
           valorUnitario
@@ -67,16 +77,18 @@ const Abastecimento = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
-        await api.post('/abastecimento', data);
+        await api.post('/peca', data);
         setLoading(false);
 
         alert('Registro cadastrado');
-        setVeiculo('');
-        setLitros('');
+        setNomePeca('');
+        setQuantidade('');
         setNomeLinha('');
-        setValorUnitario('');
         setDescricao('');
+        setValorUnitario('');
+        setDesconto('');
         setValor('');
+        setVeiculo('');
         setPickerResponse(null);
         setPreview('');
       } catch (error) {
@@ -87,12 +99,31 @@ const Abastecimento = ({ history }) => {
 
   useEffect(() => {
     async function loadRegister() {
-      const response = await api.get(`/abastecimento/${registerId}`);
+      const response = await api.get(`/peca/${registerId}`);
 
+      setNomePeca(response.data.nomePeca);
       setVeiculo(response.data.veiculo);
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
-      setLitros(String(response.data.litros));
+      setQuantidade(String(response.data.quantidade));
+
+      setDesconto(
+        inputValueMask(String(response.data.desconto) + '00')
+      );
+      if (String(response.data.desconto).split('.')[1]) {
+        if (
+          String(response.data.desconto).split('.')[1].length === 2
+        ) {
+          setDesconto(inputValueMask(String(response.data.desconto)));
+        }
+        if (
+          String(response.data.desconto).split('.')[1].length === 1
+        ) {
+          setDesconto(
+            inputValueMask(String(response.data.desconto) + '0')
+          );
+        }
+      }
 
       setValorUnitario(
         inputValueMask(String(response.data.valorUnitario) + '00')
@@ -146,9 +177,21 @@ const Abastecimento = ({ history }) => {
 
       pickerResponse && data.append('file', pickerResponse);
 
-      if (litros && litros !== 'undefined' && litros !== 'null') {
-        data.append('litros', litros);
+      if (
+        quantidade &&
+        quantidade !== 'undefined' &&
+        quantidade !== 'null'
+      ) {
+        data.append('quantidade', quantidade);
       }
+      desconto &&
+        data.append(
+          'desconto',
+          desconto
+            .replace('R$ ', '')
+            .replace('.', '')
+            .replace(',', '.')
+        );
       valorUnitario &&
         data.append(
           'valorUnitario',
@@ -158,6 +201,7 @@ const Abastecimento = ({ history }) => {
             .replace(',', '.')
         );
       veiculo && data.append('veiculo', veiculo);
+      nomePeca && data.append('nomePeca', nomePeca);
       nomeLinha && data.append('nomeLinha', nomeLinha);
       descricao && data.append('descricao', descricao);
       valor &&
@@ -166,10 +210,10 @@ const Abastecimento = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
-      await api.put(`/abastecimento/${registerId}`, data);
+      await api.put(`/peca/${registerId}`, data);
       setLoading(false);
       alert('Registro alterado!');
-      history.push('/abastecimento-list');
+      history.push('/pecas-list');
       window.history.go(0);
     } catch (error) {
       setLoading(false);
@@ -180,11 +224,7 @@ const Abastecimento = ({ history }) => {
   return (
     <>
       <HeaderName
-        pageName={
-          !registerId
-            ? 'Cadastrar Abastecimento'
-            : 'Alterar Abastecimento'
-        }
+        pageName={!registerId ? 'Cadastrar Pecas' : 'Alterar Pecas'}
       />
       <Container>
         <Content>
@@ -198,6 +238,15 @@ const Abastecimento = ({ history }) => {
           </div>
 
           <div className="box-input">
+            <label>Nome Peça</label>
+            <input
+              placeholder="Nome Peça"
+              value={nomePeca}
+              onChange={(e) => setNomePeca(e.target.value)}
+            />
+          </div>
+
+          <div className="box-input">
             <label>Veiculo</label>
             <input
               placeholder="Veiculo"
@@ -207,11 +256,13 @@ const Abastecimento = ({ history }) => {
           </div>
 
           <div className="box-input">
-            <label>Litros</label>
+            <label>Quantidade</label>
             <input
-              placeholder="Litros"
-              value={litros}
-              onChange={(e) => setLitros(inputNumber(e.target.value))}
+              placeholder="Quantidade"
+              value={quantidade}
+              onChange={(e) =>
+                setQuantidade(inputNumber(e.target.value))
+              }
             />
           </div>
 
@@ -227,11 +278,13 @@ const Abastecimento = ({ history }) => {
           </div>
 
           <div className="box-input">
-            <label>Descrição</label>
+            <label>Desconto </label>
             <input
-              placeholder="Descrição"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Desconto"
+              value={desconto}
+              onChange={(e) =>
+                setDesconto(inputValueMask(e.target.value))
+              }
             />
           </div>
 
@@ -243,6 +296,15 @@ const Abastecimento = ({ history }) => {
               onChange={(e) =>
                 setValor(inputValueMask(e.target.value))
               }
+            />
+          </div>
+
+          <div className="box-input">
+            <label>Descrição</label>
+            <input
+              placeholder="Descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
@@ -300,4 +362,4 @@ const Abastecimento = ({ history }) => {
   );
 };
 
-export default Abastecimento;
+export default Pecas;

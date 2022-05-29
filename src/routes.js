@@ -26,6 +26,9 @@ import DespesaExtraList from './pages/DespesaExtraList';
 import Hospedagem from './pages/Hospedagem';
 import HospedagemList from './pages/HospedagemList';
 
+import Pecas from './pages/Pecas';
+import PecaList from './pages/PecaList';
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -111,6 +114,9 @@ const Routes = () => (
         path="/hospedagem-list"
         component={HospedagemList}
       />
+
+      <PrivateRoute exact path="/pecas" component={Pecas} />
+      <PrivateRoute exact path="/pecas-list" component={PecaList} />
 
       <Route
         path="*"

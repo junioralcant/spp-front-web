@@ -74,6 +74,7 @@ const Hospedagem = ({ history }) => {
         setHotel('');
         setDiarias('');
         setNomeLinha('');
+        setValorUnitario('');
         setDescricao('');
         setValor('');
         setPickerResponse(null);
