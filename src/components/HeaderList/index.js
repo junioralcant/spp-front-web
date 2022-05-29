@@ -12,13 +12,17 @@ const HeaderList = ({ history, pageName, total, register }) => {
     <Container>
       <ContentHeader>
         <BoxTotal>
-          <span className="total-text">Total gasto</span>
-          <span className="total">
-            {total.toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
-          </span>
+          {pageName !== 'Listagem Roço' && (
+            <>
+              <span className="total-text">Total gasto</span>
+              <span className="total">
+                {total.toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </span>
+            </>
+          )}
         </BoxTotal>
 
         <p>{pageName}</p>
