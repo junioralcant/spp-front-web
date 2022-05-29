@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { useHistory } from 'react-router-dom';
+
+import { AiOutlineArrowLeft } from 'react-icons/ai';
+
 import {
   BoxTotal,
   BoxTotalGegister,
@@ -7,9 +11,17 @@ import {
   ContentHeader,
 } from './styles';
 
-const HeaderList = ({ history, pageName, total, register }) => {
+const HeaderList = ({ pageName, total, register }) => {
+  let history = useHistory();
+
+  function goBack() {
+    history.push('/');
+  }
   return (
     <Container>
+      <button onClick={goBack} className="goback">
+        <AiOutlineArrowLeft />
+      </button>
       <ContentHeader>
         <BoxTotal>
           {pageName !== 'Listagem Roço' && (

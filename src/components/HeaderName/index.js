@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { Container, Button, Content, Column, Girl } from './styles';
+import { AiOutlineArrowLeft } from 'react-icons/ai';
 
-const HeaderName = ({ history, pageName }) => {
+import { useHistory } from 'react-router-dom';
+
+import { Container } from './styles';
+
+const HeaderName = ({ pageName }) => {
+  let history = useHistory();
+
+  function goBack() {
+    history.push('/');
+  }
   return (
     <Container>
+      <button onClick={goBack} className="goback">
+        <AiOutlineArrowLeft />
+      </button>
       <p>{pageName}</p>
     </Container>
   );

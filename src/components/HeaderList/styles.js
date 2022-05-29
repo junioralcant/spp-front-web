@@ -14,6 +14,16 @@ export const Container = styled.div`
     font-size: 20px;
     color: #fff;
   }
+
+  button.goback {
+    position: absolute;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 25px;
+    left: 16px;
+    top: 8px;
+  }
 `;
 
 export const ContentHeader = styled.div`
