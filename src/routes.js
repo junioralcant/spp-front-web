@@ -23,6 +23,9 @@ import AbastecimentoList from './pages/AbastecimentoList';
 import DespesaExtra from './pages/DespesaExtra';
 import DespesaExtraList from './pages/DespesaExtraList';
 
+import Hospedagem from './pages/Hospedagem';
+import HospedagemList from './pages/HospedagemList';
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -99,6 +102,14 @@ const Routes = () => (
         exact
         path="/despesa-extra-list"
         component={DespesaExtraList}
+      />
+
+      <PrivateRoute exact path="/hospedagem" component={Hospedagem} />
+
+      <PrivateRoute
+        exact
+        path="/hospedagem-list"
+        component={HospedagemList}
       />
 
       <Route

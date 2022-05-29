@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+
 import { useLocation } from 'react-router-dom';
 import Compressor from 'compressorjs';
 
@@ -9,21 +10,21 @@ import { Container, Content, Erro } from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
-import inputNumber from '../../components/inputNumber';
-
 import Loader from '../../components/Loader';
+import inputNumber from '../../components/inputNumber/index';
 
-const DespesaExtra = ({ history }) => {
+const Hospedagem = ({ history }) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [quantidade, setQuantidade] = useState('');
+  const [hotel, setHotel] = useState('');
   const [nomeLinha, setNomeLinha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
-  const [item, setItem] = useState('');
+  const [diarias, setDiarias] = useState('');
+  const [valorUnitario, setValorUnitario] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -50,20 +51,28 @@ const DespesaExtra = ({ history }) => {
 
         data.append('file', pickerResponse);
 
-        data.append('item', item);
-        data.append('quantidade', quantidade);
+        data.append('diarias', diarias);
+        data.append('nomeHotel', hotel);
         data.append('nomeLinha', nomeLinha);
         data.append('descricao', descricao);
+        data.append(
+          'valorUnitario',
+          valorUnitario
+            .replace('R$ ', '')
+            .replace('.', '')
+            .replace(',', '.')
+        );
         data.append(
           'total',
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
-        await api.post('/despesa-extra', data);
+        await api.post('/hospedagem', data);
         setLoading(false);
 
         alert('Registro cadastrado');
-        setQuantidade('');
+        setHotel('');
+        setDiarias('');
         setNomeLinha('');
         setDescricao('');
         setValor('');
@@ -77,12 +86,34 @@ const DespesaExtra = ({ history }) => {
 
   useEffect(() => {
     async function loadRegister() {
-      const response = await api.get(`/despesa-extra/${registerId}`);
+      const response = await api.get(`/hospedagem/${registerId}`);
 
-      setQuantidade(String(response.data.quantidade));
+      setHotel(response.data.hotel);
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
-      setItem(response.data.item);
+      setDiarias(String(response.data.diarias));
+
+      setValorUnitario(
+        inputValueMask(String(response.data.valorUnitario) + '00')
+      );
+      if (String(response.data.valorUnitario).split('.')[1]) {
+        if (
+          String(response.data.valorUnitario).split('.')[1].length ===
+          2
+        ) {
+          setValorUnitario(
+            inputValueMask(String(response.data.valorUnitario))
+          );
+        }
+        if (
+          String(response.data.valorUnitario).split('.')[1].length ===
+          1
+        ) {
+          setValorUnitario(
+            inputValueMask(String(response.data.valorUnitario) + '0')
+          );
+        }
+      }
 
       setValor(inputValueMask(String(response.data.total) + '00'));
       if (String(response.data.total).split('.')[1]) {
@@ -113,14 +144,19 @@ const DespesaExtra = ({ history }) => {
       const data = new FormData();
 
       pickerResponse && data.append('file', pickerResponse);
-      item && data.append('item', item);
-      if (
-        quantidade &&
-        quantidade !== 'undefined' &&
-        quantidade !== 'null'
-      ) {
-        data.append('quantidade', quantidade);
+
+      if (diarias && diarias !== 'undefined' && diarias !== 'null') {
+        data.append('diarias', diarias);
       }
+      valorUnitario &&
+        data.append(
+          'valorUnitario',
+          valorUnitario
+            .replace('R$ ', '')
+            .replace('.', '')
+            .replace(',', '.')
+        );
+      hotel && data.append('nomeHotel', hotel);
       nomeLinha && data.append('nomeLinha', nomeLinha);
       descricao && data.append('descricao', descricao);
       valor &&
@@ -129,11 +165,11 @@ const DespesaExtra = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
-      await api.put(`/despesa-extra/${registerId}`, data);
-      alert('Registro alterado!');
-      history.push('/despesa-extra-list');
-      window.history.go(0);
+      await api.put(`/hospedagem/${registerId}`, data);
       setLoading(false);
+      alert('Registro alterado!');
+      history.push('/hospedagem-list');
+      window.history.go(0);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -144,9 +180,7 @@ const DespesaExtra = ({ history }) => {
     <>
       <HeaderName
         pageName={
-          !registerId
-            ? 'Cadastrar Alimentação'
-            : 'Alterar Alimentação'
+          !registerId ? 'Cadastrar Hospedagem' : 'Alterar Hospedagem'
         }
       />
       <Container>
@@ -161,21 +195,32 @@ const DespesaExtra = ({ history }) => {
           </div>
 
           <div className="box-input">
-            <label>Nome item</label>
+            <label>Nome Hotel</label>
             <input
-              placeholder="Nome item"
-              value={item}
-              onChange={(e) => setItem(e.target.value)}
+              placeholder="Nome Hotel"
+              value={hotel}
+              onChange={(e) => setHotel(e.target.value)}
             />
           </div>
 
           <div className="box-input">
-            <label>Quantidade</label>
+            <label>Diárias</label>
             <input
-              placeholder="Quantidade"
-              value={quantidade}
+              placeholder="Diárias"
+              value={diarias}
               onChange={(e) =>
-                setQuantidade(inputNumber(e.target.value))
+                setDiarias(inputNumber(e.target.value))
+              }
+            />
+          </div>
+
+          <div className="box-input">
+            <label>Valor unitário </label>
+            <input
+              placeholder="Valor unitário"
+              value={valorUnitario}
+              onChange={(e) =>
+                setValorUnitario(inputValueMask(e.target.value))
               }
             />
           </div>
@@ -254,4 +299,4 @@ const DespesaExtra = ({ history }) => {
   );
 };
 
-export default DespesaExtra;
+export default Hospedagem;
