@@ -32,6 +32,8 @@ import PecaList from './pages/PecaList';
 import Roco from './pages/Roco';
 import RocoList from './pages/RocoList';
 
+import TodasDespesasList from './pages/TodasDespesasList';
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -123,6 +125,12 @@ const Routes = () => (
 
       <PrivateRoute exact path="/roco" component={Roco} />
       <PrivateRoute exact path="/roco-list" component={RocoList} />
+
+      <PrivateRoute
+        exact
+        path="/todas-despesas-list"
+        component={TodasDespesasList}
+      />
 
       <Route
         path="*"
