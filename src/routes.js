@@ -35,6 +35,7 @@ import RocoList from './pages/RocoList';
 import TodasDespesasList from './pages/TodasDespesasList';
 
 import AlterarSaldo from './pages/AlterarSaldo';
+import AlterarSaldoList from './pages/AlterarSaldoList';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -138,6 +139,12 @@ const Routes = () => (
         exact
         path="/alterar-saldo"
         component={AlterarSaldo}
+      />
+
+      <PrivateRoute
+        exact
+        path="/alterar-saldo-list"
+        component={AlterarSaldoList}
       />
 
       <Route

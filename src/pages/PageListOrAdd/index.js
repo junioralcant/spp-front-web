@@ -15,15 +15,13 @@ const PageListOrAdd = ({ history }) => {
         <Content>
           {pageName !== 'Todas Despesas' && (
             <button onClick={() => history.push(page)}>
-              {pageName === 'Alterar Saldo' ? 'Alterar' : 'Cadastar'}
+              Cadastar
             </button>
           )}
 
-          {pageName !== 'Alterar Saldo' && (
-            <button onClick={() => history.push(`${page}-list`)}>
-              Listar
-            </button>
-          )}
+          <button onClick={() => history.push(`${page}-list`)}>
+            Listar
+          </button>
         </Content>
       </Container>
     </>

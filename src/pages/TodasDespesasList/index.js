@@ -22,13 +22,16 @@ import {
 } from './styles';
 
 import HeaderList from '../../components/HeaderList';
+import HeaderTodasDespesas from '../../components/HeaderTodasDespesas';
 
 const TodasDespesasList = ({ history }) => {
   const [search, setSearch] = useState(false);
   const [todasDespesas, setTodasDespesas] = useState([]);
+  const [totals, setTotals] = useState([]);
 
   const [dataIncio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
+  const [allDatas, setAllDatas] = useState('');
 
   const [dataInicioChecks, setDataInicioChecks] = useState('');
   const [dataFimChecks, setDataFimChecks] = useState('');
@@ -51,11 +54,24 @@ const TodasDespesasList = ({ history }) => {
       return;
     }
 
+    setAllDatas('todas');
     setDataInicioChecks(dataIncio);
     setDataFimChecks(dataFim);
 
     setSearch(true);
   }
+
+  useEffect(() => {
+    async function loadTotal() {
+      const response = await api.get(
+        `/saldo?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&allDatas=${allDatas}`
+      );
+
+      setTotals(response.data);
+    }
+
+    loadTotal();
+  }, [dataFimChecks, dataInicioChecks, allDatas]);
 
   function coloseSearch() {
     setDataFim('');
@@ -63,6 +79,7 @@ const TodasDespesasList = ({ history }) => {
     setDataInicio('');
     setDataInicioChecks('');
     setNomeLinha('');
+    setAllDatas('');
     setSearch(false);
   }
 
@@ -84,21 +101,31 @@ const TodasDespesasList = ({ history }) => {
       registerId: id,
     });
   }
-
-  let total = 0;
+  let totalSaidas = 0;
+  let totalSaldo = 0;
 
   todasDespesas.filter((item) => {
     if (item.total) {
-      total += item.total;
+      totalSaidas += item.total;
     }
   });
 
+  totals.filter((item) => {
+    if (item.total) {
+      totalSaldo += item.total;
+    }
+  });
+
+  let resumo = totalSaldo - totalSaidas;
+
   return (
     <>
-      <HeaderList
-        pageName="Listagem Alimentação"
-        total={total}
-        register={todasDespesas.length}
+      <HeaderTodasDespesas
+        namePage="Todas as Despesas"
+        totalSaidas={totalSaidas}
+        totalSaldo={totalSaldo}
+        resumo={resumo}
+        registro={todasDespesas.length}
       />
       <Container>
         <Content>

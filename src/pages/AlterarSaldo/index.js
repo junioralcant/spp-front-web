@@ -9,45 +9,37 @@ import { Container, Content, Erro } from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
-import inputNumber from '../../components/inputNumber';
-
 import Loader from '../../components/Loader';
 
 const AlterarSaldo = ({ history }) => {
-  const location = useLocation();
   const [valor, setValor] = useState('');
   const [id, setId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    async function loadRegister() {
-      const response = await api.get('/saldo');
+  async function register() {
+    if (!valor) {
+      setError('Informe um valor para continuar');
+    } else {
+      try {
+        setLoading(true);
 
-      setValor(inputValueMask(String(response.data.total) + '00'));
-      setId(response.data._id);
-    }
+        await api.post('/saldo', {
+          total: valor
+            .replace('R$ ', '')
+            .replace('.', '')
+            .replace(',', '.'),
+        });
+        setLoading(false);
 
-    loadRegister();
-  }, []);
+        alert('Saldo cadastrado');
 
-  async function updateRegister() {
-    try {
-      setLoading(true);
-      let totalFormatted = valor
-        .replace('R$ ', '')
-        .replace('.', '')
-        .replace(',', '.');
-      const response = await api.put(`/saldo/${id}`, {
-        total: totalFormatted,
-      });
-      console.log(response.data);
-
-      alert('Saldo alterado!');
-      history.push('/');
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
+        setValor('');
+        history.push('/');
+        window.history.go(0);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -67,15 +59,17 @@ const AlterarSaldo = ({ history }) => {
             />
           </div>
 
+          {!!error && <Erro>{error}</Erro>}
+
           {loading ? (
             <Loader />
           ) : (
             <button
               onClick={() => {
-                updateRegister();
+                register();
               }}
             >
-              Salvar
+              Cadastrar
             </button>
           )}
         </Content>

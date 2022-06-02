@@ -6,7 +6,7 @@ import { logout } from '../../services/auth';
 import api from '../../services/api';
 
 const HeaderHome = ({ history }) => {
-  const [total, setTotal] = useState();
+  const [totals, setTotals] = useState([]);
   const [saidas, setSaidas] = useState([]);
 
   useEffect(() => {
@@ -23,17 +23,24 @@ const HeaderHome = ({ history }) => {
     async function loadTotal() {
       const response = await api.get('/saldo');
 
-      setTotal(response.data.total);
+      setTotals(response.data);
     }
 
     loadTotal();
   }, []);
 
   let totalSaidas = 0;
+  let total = 0;
 
   saidas.filter((item) => {
     if (item.total) {
       totalSaidas += item.total;
+    }
+  });
+
+  totals.filter((item) => {
+    if (item.total) {
+      total += item.total;
     }
   });
 
