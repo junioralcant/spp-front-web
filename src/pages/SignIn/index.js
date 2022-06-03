@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import api from '../../services/api';
-import { login } from '../../services/auth';
+import { login, user } from '../../services/auth';
 import Load from '../../components/Loader';
 
 import { Container, Login } from './styles';
@@ -22,6 +22,8 @@ const SignIn = ({ history }) => {
           email,
           password,
         });
+
+        user(response.data.user);
         login(response.data.token);
         history.push('/');
         setLoading(false);

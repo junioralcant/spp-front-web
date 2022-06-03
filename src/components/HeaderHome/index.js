@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
+import { AiOutlineUser } from 'react-icons/ai';
+
 import { Container, Button, Content, Column, Girl } from './styles';
 
+import { getUser } from '../../services/auth';
+
 import { logout } from '../../services/auth';
+
 import api from '../../services/api';
 
 const HeaderHome = ({ history }) => {
   const [totals, setTotals] = useState([]);
   const [saidas, setSaidas] = useState([]);
+
+  let userLogged = getUser();
 
   useEffect(() => {
     async function loadSaidas() {
@@ -67,6 +74,12 @@ const HeaderHome = ({ history }) => {
           </span>
         </div>
         <div>
+          <div className="left perfil">
+            <span>{userLogged.name}</span>
+            <span className="icon-perfil">
+              <AiOutlineUser />
+            </span>
+          </div>
           <div className="left">
             <span>Saídas</span>
             <span className="saidas">

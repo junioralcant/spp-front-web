@@ -180,21 +180,6 @@ const TodasDespesasList = ({ history }) => {
           <BoxList>
             {todasDespesas.map((despesa) => (
               <div key={despesa._id} className="card">
-                <div className="header-card">
-                  <button
-                    onClick={() => deleteRegister(despesa._id)}
-                    className="button-header-edit"
-                  >
-                    <AiOutlineDelete />
-                  </button>
-                  <button
-                    onClick={() => editRegister(despesa._id)}
-                    className="button-header-delete"
-                  >
-                    <AiFillEdit />
-                  </button>
-                </div>
-
                 <BoxCardContent>
                   <div className="box-data-content">
                     <div className="box-data">

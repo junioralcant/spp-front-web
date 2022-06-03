@@ -50,6 +50,17 @@ export const Content = styled.div`
     span.resumo {
       color: #e3db59;
     }
+    span.icon-perfil {
+      margin-left: 8px;
+      margin-bottom: 3px;
+    }
+  }
+
+  div.perfil {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
   }
 
   div.caixa {

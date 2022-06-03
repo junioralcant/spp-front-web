@@ -162,6 +162,14 @@ const AlterarSaldoList = ({ history }) => {
                     </div>
 
                     <div className="box-data">
+                      <p className="foco"> Para: </p>
+                      <p>
+                        {adiantamento.userCreate &&
+                          adiantamento.userCreate.name}
+                      </p>
+                    </div>
+
+                    <div className="box-data">
                       <p className="foco"> Total: </p>
                       <p>
                         {' '}

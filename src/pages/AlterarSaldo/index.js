@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import Compressor from 'compressorjs';
+import React, { useState } from 'react';
+
+import { getUser } from '../../services/auth';
 
 import HeaderName from '../../components/HeaderName';
+
 import api from '../../services/api';
 
 import { Container, Content, Erro } from './styles';
@@ -12,8 +13,9 @@ import inputValueMask from '../../components/inputValueMask';
 import Loader from '../../components/Loader';
 
 const AlterarSaldo = ({ history }) => {
+  let userLogged = getUser();
+
   const [valor, setValor] = useState('');
-  const [id, setId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -64,13 +66,15 @@ const AlterarSaldo = ({ history }) => {
           {loading ? (
             <Loader />
           ) : (
-            <button
-              onClick={() => {
-                register();
-              }}
-            >
-              Cadastrar
-            </button>
+            userLogged.role !== 'ROLE_ADMIN' && (
+              <button
+                onClick={() => {
+                  register();
+                }}
+              >
+                Cadastrar
+              </button>
+            )
           )}
         </Content>
       </Container>
