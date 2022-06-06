@@ -39,36 +39,33 @@ const Roco = ({ history }) => {
   }
 
   async function register() {
-    if (!pickerResponseAntes) {
-      setError('Selecioneuma foto de antes para continuar');
-    } else {
-      try {
-        setError('');
+    try {
+      setError('');
 
-        setLoading(true);
-        const data = new FormData();
+      setLoading(true);
+      const data = new FormData();
 
+      pickerResponseAntes &&
         data.append('fotoAntes', pickerResponseAntes);
 
-        pickerResponseDepois &&
-          data.append('fotoDepois', pickerResponseDepois);
+      pickerResponseDepois &&
+        data.append('fotoDepois', pickerResponseDepois);
 
-        data.append('nomeLinha', nomeLinha);
-        descricao && data.append('descricao', descricao);
+      data.append('nomeLinha', nomeLinha);
+      descricao && data.append('descricao', descricao);
 
-        await api.post('/roco', data);
-        setLoading(false);
+      await api.post('/roco', data);
+      setLoading(false);
 
-        alert('Registro cadastrado');
-        setNomeLinha('');
-        setDescricao('');
-        setPickerResponseAntes(null);
-        setPreviewAntes('');
-        setPickerResponseDepois(null);
-        setPreviewDepois('');
-      } catch (error) {
-        console.log(error);
-      }
+      alert('Registro cadastrado');
+      setNomeLinha('');
+      setDescricao('');
+      setPickerResponseAntes(null);
+      setPreviewAntes('');
+      setPickerResponseDepois(null);
+      setPreviewDepois('');
+    } catch (error) {
+      console.log(error);
     }
   }
 

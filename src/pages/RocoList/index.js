@@ -182,15 +182,17 @@ const RocoList = ({ history }) => {
                     </div>
                   </div>
                   <div className="box-image-content">
-                    <div className="box-data">
-                      <p>Antes</p>
-                      <a href={roco.fotoAntes.url} target="_blank">
-                        <img
-                          className="image-content"
-                          src={roco.fotoAntes.url}
-                        />
-                      </a>
-                    </div>
+                    {roco.fotoAntes && (
+                      <div className="box-data">
+                        <p>Antes</p>
+                        <a href={roco.fotoAntes.url} target="_blank">
+                          <img
+                            className="image-content"
+                            src={roco.fotoAntes.url}
+                          />
+                        </a>
+                      </div>
+                    )}
 
                     {roco.fotoDepois && (
                       <div className="box-data">
