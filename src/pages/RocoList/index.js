@@ -34,17 +34,18 @@ const RocoList = ({ history }) => {
   const [dataFimChecks, setDataFimChecks] = useState('');
 
   const [nomeLinha, setNomeLinha] = useState('');
+  const [descricao, setDescricao] = useState('');
 
   useEffect(() => {
     async function loadroco() {
       const response = await api.get(
-        `/roco?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}`
+        `/roco?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}&descricao=${descricao}`
       );
       setRocos(response.data);
     }
 
     loadroco();
-  }, [dataFimChecks, dataInicioChecks, nomeLinha]);
+  }, [dataFimChecks, dataInicioChecks, nomeLinha, descricao]);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -104,9 +105,17 @@ const RocoList = ({ history }) => {
         <Content>
           <div className="box-input">
             <input
-              placeholder="Buscas nome da linha"
+              placeholder="Buscar nome da linha"
               value={nomeLinha}
               onChange={(e) => setNomeLinha(e.target.value)}
+            />
+          </div>
+
+          <div className="box-input">
+            <input
+              placeholder="Buscar por descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
