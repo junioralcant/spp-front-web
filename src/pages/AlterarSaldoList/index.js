@@ -12,6 +12,7 @@ import {
 
 import {
   BoxCardContent,
+  BoxDescriptionContent,
   BoxInpuDate,
   BoxInputsDate,
   BoxList,
@@ -31,19 +32,20 @@ const AlterarSaldoList = ({ history }) => {
   const [dataInicioChecks, setDataInicioChecks] = useState('');
   const [dataFimChecks, setDataFimChecks] = useState('');
 
-  const [nomeLinha, setNomeLinha] = useState('');
-  const [colaborador, setColaborador] = useState('');
+  const [descricao, setDescricao] = useState('');
 
   useEffect(() => {
     async function loadSaldos() {
       const response = await api.get(
-        `/saldo?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}`
+        `/saldo?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&descricao=${descricao}`
       );
       setSaldos(response.data);
     }
 
     loadSaldos();
-  }, [dataFimChecks, dataInicioChecks, nomeLinha, colaborador]);
+  }, [dataFimChecks, dataInicioChecks, descricao]);
+
+  console.log(descricao);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -61,8 +63,7 @@ const AlterarSaldoList = ({ history }) => {
     setDataFimChecks('');
     setDataInicio('');
     setDataInicioChecks('');
-    setNomeLinha('');
-    setColaborador('');
+    setDescricao('');
     setSearch(false);
   }
 
@@ -98,6 +99,14 @@ const AlterarSaldoList = ({ history }) => {
       />
       <Container>
         <Content>
+          <div className="box-input">
+            <input
+              placeholder="Buscar por descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+            />
+          </div>
+
           <BoxInputsDate>
             <BoxInpuDate>
               <input
@@ -182,6 +191,13 @@ const AlterarSaldoList = ({ history }) => {
                     </div>
                   </div>
                 </BoxCardContent>
+
+                <BoxDescriptionContent>
+                  <span>Descrição</span>
+                  <span className="text-description">
+                    {adiantamento.descricao}
+                  </span>
+                </BoxDescriptionContent>
               </div>
             ))}
           </BoxList>
