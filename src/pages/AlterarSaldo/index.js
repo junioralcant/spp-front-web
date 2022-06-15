@@ -16,6 +16,8 @@ const AlterarSaldo = ({ history }) => {
   let userLogged = getUser();
 
   const [valor, setValor] = useState('');
+  const [descricao, setDescricao] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -31,12 +33,15 @@ const AlterarSaldo = ({ history }) => {
             .replace('R$ ', '')
             .replace('.', '')
             .replace(',', '.'),
+          descricao: descricao,
         });
         setLoading(false);
 
         alert('Saldo cadastrado');
 
         setValor('');
+        setDescricao('');
+
         history.push('/');
         window.history.go(0);
       } catch (error) {
@@ -58,6 +63,15 @@ const AlterarSaldo = ({ history }) => {
               onChange={(e) =>
                 setValor(inputValueMask(e.target.value))
               }
+            />
+          </div>
+
+          <div className="box-input">
+            <label>Descrição</label>
+            <input
+              placeholder="Descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
