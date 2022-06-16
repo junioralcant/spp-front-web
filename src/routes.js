@@ -37,6 +37,8 @@ import TodasDespesasList from './pages/TodasDespesasList';
 import AlterarSaldo from './pages/AlterarSaldo';
 import AlterarSaldoList from './pages/AlterarSaldoList';
 
+import Print from './pages/Print';
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -146,6 +148,8 @@ const Routes = () => (
         path="/alterar-saldo-list"
         component={AlterarSaldoList}
       />
+
+      <PrivateRoute exact path="/print" component={Print} />
 
       <Route
         path="*"

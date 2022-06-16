@@ -10,12 +10,25 @@ export default createGlobalStyle`
         box-sizing: border-box;
     }
 
+    @media print {
+    body {
+      background-color: red;
+ 
+      box-sizing: border-box;
+    }
+  }
+
     body {
         background: #EFF3F6;
         color: #000;
         font-family: 'Roboto', sans-serif;
         text-rendering: optimizeLegibility !important;  
         -webkit-font-smoothing: antialiased !important;
+        
+        @media print {
+            background-color: #fff;
+            box-sizing: border-box;
+        }
     }
 
     html, body, #root {

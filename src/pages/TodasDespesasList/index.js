@@ -6,9 +6,8 @@ import api from '../../services/api';
 
 import {
   AiOutlineSearch,
-  AiOutlineDelete,
   AiOutlineCloseCircle,
-  AiFillEdit,
+  AiFillPrinter,
 } from 'react-icons/ai';
 
 import {
@@ -118,6 +117,15 @@ const TodasDespesasList = ({ history }) => {
 
   let resumo = totalSaldo - totalSaidas;
 
+  function print() {
+    history.push('/print', {
+      todasDespesas,
+      totalSaidas,
+      totalSaldo,
+      resumo,
+    });
+  }
+
   return (
     <>
       <HeaderTodasDespesas
@@ -163,6 +171,16 @@ const TodasDespesasList = ({ history }) => {
               }}
             >
               <AiOutlineSearch />
+            </button>
+
+            <button
+              className="search"
+              onClick={() => {
+                print();
+              }}
+              style={{ marginLeft: 5 }}
+            >
+              <AiFillPrinter />
             </button>
 
             {search && (
