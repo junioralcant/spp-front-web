@@ -91,7 +91,7 @@ const Adiantamento = ({ history }) => {
         }
       }
 
-      setUri(response.data.imagem.url);
+      response.data.imagem && setUri(response.data.imagem.url);
     }
 
     if (location.state) {

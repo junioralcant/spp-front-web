@@ -219,7 +219,6 @@ const TodasDespesasList = ({ history }) => {
                     <div className="box-data">
                       <p className="foco"> Total: </p>
                       <p>
-                        {' '}
                         {despesa.total &&
                           despesa.total.toLocaleString('pt-br', {
                             style: 'currency',

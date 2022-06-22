@@ -207,12 +207,14 @@ const Adiantamento = ({ history }) => {
                       </p>
                     </div>
                   </div>
-                  <a href={adiantamento.imagem.url} target="_blank">
-                    <img
-                      className="image-content"
-                      src={adiantamento.imagem.url}
-                    />
-                  </a>
+                  {adiantamento.imagem && (
+                    <a href={adiantamento.imagem.url} target="_blank">
+                      <img
+                        className="image-content"
+                        src={adiantamento.imagem.url}
+                      />
+                    </a>
+                  )}
                 </BoxCardContent>
 
                 <BoxDescriptionContent>
