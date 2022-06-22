@@ -228,12 +228,15 @@ const TodasDespesasList = ({ history }) => {
                       </p>
                     </div>
                   </div>
-                  <a href={despesa.imagem.url} target="_blank">
-                    <img
-                      className="image-content"
-                      src={despesa.imagem.url}
-                    />
-                  </a>
+
+                  {despesa.imagem && (
+                    <a href={despesa.imagem.url} target="_blank">
+                      <img
+                        className="image-content"
+                        src={despesa.imagem.url}
+                      />
+                    </a>
+                  )}
                 </BoxCardContent>
 
                 <BoxDescriptionContent>
