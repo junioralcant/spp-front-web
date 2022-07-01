@@ -13,6 +13,8 @@ const Roco = ({ history }) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
+  const [pageName, setPageName] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const [nomeLinha, setNomeLinha] = useState('');
@@ -58,7 +60,7 @@ const Roco = ({ history }) => {
       setLoading(false);
 
       alert('Registro cadastrado');
-      setNomeLinha('');
+      setNomeLinha(pageName);
       setDescricao('');
       setPickerResponseAntes(null);
       setPreviewAntes('');
@@ -83,14 +85,19 @@ const Roco = ({ history }) => {
     }
 
     if (location.state) {
-      const { registerId: id } = location.state;
+      const { registerId: id, pageName: page } = location.state;
       setRegisterId(id);
+      setPageName(page);
     }
 
     if (registerId) {
       loadRegister();
+    } else {
+      setNomeLinha(pageName);
     }
-  }, [registerId, location]);
+  }, [registerId, location, pageName]);
+
+  console.log(pageName);
 
   async function updateRegister() {
     try {
@@ -108,7 +115,7 @@ const Roco = ({ history }) => {
 
       await api.put(`/roco/${registerId}`, data);
       alert('Registro alterado!');
-      history.push('/roco-list');
+      history.push('/roco-list', { pageName });
       window.history.go(0);
       setLoading(false);
     } catch (error) {
@@ -120,7 +127,11 @@ const Roco = ({ history }) => {
   return (
     <>
       <HeaderName
-        pageName={!registerId ? 'Cadastrar Roço' : 'Alterar Roço'}
+        pageName={
+          !registerId
+            ? `Cadastrar Roço ${pageName}`
+            : `Alterar Roço ${pageName}`
+        }
       />
       <Container>
         <Content>

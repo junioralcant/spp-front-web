@@ -129,6 +129,7 @@ const Routes = () => (
       <PrivateRoute exact path="/pecas-list" component={PecaList} />
 
       <PrivateRoute exact path="/roco" component={Roco} />
+
       <PrivateRoute exact path="/roco-list" component={RocoList} />
 
       <PrivateRoute

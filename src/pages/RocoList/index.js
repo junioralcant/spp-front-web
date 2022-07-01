@@ -22,8 +22,13 @@ import {
 } from './styles';
 
 import HeaderList from '../../components/HeaderList';
+import { useLocation } from 'react-router-dom';
 
 const RocoList = ({ history }) => {
+  const location = useLocation();
+
+  const { pageName } = location.state;
+
   const [search, setSearch] = useState(false);
   const [rocos, setRocos] = useState([]);
 
@@ -38,14 +43,21 @@ const RocoList = ({ history }) => {
 
   useEffect(() => {
     async function loadroco() {
+      console.log('teste');
       const response = await api.get(
-        `/roco?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}&descricao=${descricao}`
+        `/roco?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${pageName}&descricao=${descricao}`
       );
       setRocos(response.data);
     }
 
     loadroco();
-  }, [dataFimChecks, dataInicioChecks, nomeLinha, descricao]);
+  }, [
+    dataFimChecks,
+    dataInicioChecks,
+    nomeLinha,
+    descricao,
+    pageName,
+  ]);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -71,7 +83,9 @@ const RocoList = ({ history }) => {
     if (window.confirm(`Deseja realmente deletar esse registro?`))
       try {
         await api.delete(`/roco/${id}`);
-        const response = await api.get('/roco');
+        const response = await api.get(
+          `/roco?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${pageName}&descricao=${descricao}`
+        );
         setRocos(response.data);
         alert('Registro deletado com sucesso!');
       } catch (error) {
@@ -83,6 +97,7 @@ const RocoList = ({ history }) => {
   function editRegister(id) {
     history.push('/roco', {
       registerId: id,
+      pageName,
     });
   }
 
@@ -97,19 +112,19 @@ const RocoList = ({ history }) => {
   return (
     <>
       <HeaderList
-        pageName="Listagem Roço"
+        pageName={`Listagem Roço ${pageName}`}
         total={total}
         register={rocos.length}
       />
       <Container>
         <Content>
-          <div className="box-input">
+          {/* <div className="box-input">
             <input
               placeholder="Buscar nome da linha"
               value={nomeLinha}
               onChange={(e) => setNomeLinha(e.target.value)}
             />
-          </div>
+          </div> */}
 
           <div className="box-input">
             <input
