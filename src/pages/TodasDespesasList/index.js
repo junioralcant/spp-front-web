@@ -36,17 +36,18 @@ const TodasDespesasList = ({ history }) => {
   const [dataFimChecks, setDataFimChecks] = useState('');
 
   const [nomeLinha, setNomeLinha] = useState('');
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     async function loadDespesa() {
       const response = await api.get(
-        `/todasdespesas?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}`
+        `/todasdespesas?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}&title=${title}`
       );
       setTodasDespesas(response.data);
     }
 
     loadDespesa();
-  }, [dataFimChecks, dataInicioChecks, nomeLinha]);
+  }, [dataFimChecks, dataInicioChecks, nomeLinha, title]);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -139,9 +140,17 @@ const TodasDespesasList = ({ history }) => {
         <Content>
           <div className="box-input">
             <input
-              placeholder="Buscas nome da linha"
+              placeholder="Buscar nome da linha"
               value={nomeLinha}
               onChange={(e) => setNomeLinha(e.target.value)}
+            />
+          </div>
+
+          <div className="box-input">
+            <input
+              placeholder="Buscar por tipo de despesa"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
