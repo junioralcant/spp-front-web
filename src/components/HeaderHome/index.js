@@ -1,40 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
-import { AiOutlineUser } from 'react-icons/ai';
+import {AiOutlineUser} from 'react-icons/ai';
 
-import { Container, Button, Content, Column, Girl } from './styles';
+import {Container, Button, Content, Column, Girl} from './styles';
 
-import { getUser } from '../../services/auth';
+import {getUser} from '../../services/auth';
 
-import { logout } from '../../services/auth';
+import {logout} from '../../services/auth';
 
 import api from '../../services/api';
 
-const HeaderHome = ({ history }) => {
+const HeaderHome = ({history}) => {
   const [totals, setTotals] = useState([]);
   const [saidas, setSaidas] = useState([]);
+  const [dateFilter, setDateFilter] = useState('2023');
 
   let userLogged = getUser();
 
   useEffect(() => {
     async function loadSaidas() {
-      const response = await api.get('/todasdespesas');
+      const response = await api.get(
+        `/todasdespesas?dataIncio=${dateFilter}-01-01&dataFim=${dateFilter}-12-31`
+      );
 
       setSaidas(response.data);
     }
 
     loadSaidas();
-  }, []);
+  }, [dateFilter]);
 
   useEffect(() => {
     async function loadTotal() {
-      const response = await api.get('/saldo');
+      const response = await api.get(
+        `/saldo?dataIncio=${dateFilter}-01-01&dataFim=${dateFilter}-12-31`
+      );
 
       setTotals(response.data);
     }
 
     loadTotal();
-  }, []);
+  }, [dateFilter]);
 
   let totalSaidas = 0;
   let total = 0;
@@ -57,6 +62,8 @@ const HeaderHome = ({ history }) => {
     logout();
     window.history.go(0);
   }
+
+  console.log(dateFilter);
   return (
     <Container>
       <Content>
@@ -72,6 +79,15 @@ const HeaderHome = ({ history }) => {
               })
             )}
           </span>
+          <select
+            onChange={(e) => setDateFilter(e.target.value)}
+            value={dateFilter}
+          >
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+          </select>
         </div>
         <div>
           <div className="left perfil">

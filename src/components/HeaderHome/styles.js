@@ -65,6 +65,13 @@ export const Content = styled.div`
 
   div.caixa {
     margin-top: 30px;
+
+    select {
+      margin-top: 3px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 16px;
+    }
   }
 
   div.left {
