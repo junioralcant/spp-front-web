@@ -74,6 +74,8 @@ const Alimentacao = ({history}) => {
         setValor('');
         setPickerResponse(null);
         setPreview('');
+        setTipoDePagamento('');
+        setDataNota('');
       } catch (error) {
         console.log(error);
       }

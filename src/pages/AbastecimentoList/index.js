@@ -214,8 +214,13 @@ const AbastecimentoList = ({history}) => {
                             }
                           )}
                       </p>
-                      <p className="foco"> Data: </p>
                     </div>
+
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{abastecimento.tipoPagamento}</p>
+                    </div>
+
                     <div className="box-data">
                       <p className="foco"> Total: </p>
                       <p>
