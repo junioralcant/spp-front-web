@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -23,7 +23,7 @@ import {
 
 import HeaderList from '../../components/HeaderList';
 
-const PecaList = ({ history }) => {
+const PecaList = ({history}) => {
   const [search, setSearch] = useState(false);
   const [despesasExtras, setDespesasExtras] = useState([]);
 
@@ -233,6 +233,10 @@ const PecaList = ({ history }) => {
                             }
                           )}
                       </p>
+                    </div>
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{hospedagem.tipoPagamento}</p>
                     </div>
                     <div className="box-data">
                       <p className="foco"> Total: </p>

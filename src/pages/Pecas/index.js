@@ -1,19 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Compressor from 'compressorjs';
 
 import HeaderName from '../../components/HeaderName';
 import api from '../../services/api';
 
-import { Container, Content, Erro } from './styles';
+import {Container, Content, Erro} from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
 import Loader from '../../components/Loader';
 import inputNumber from '../../components/inputNumber/index';
+import {SelectTypePayment} from '../../components/SelectTypePayment';
+import moment from 'moment';
 
-const Pecas = ({ history }) => {
+const Pecas = ({history}) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
@@ -27,6 +29,8 @@ const Pecas = ({ history }) => {
   const [valorUnitario, setValorUnitario] = useState('');
   const [desconto, setDesconto] = useState('');
   const [veiculo, setVeiculo] = useState('');
+  const [tipoDePagamento, setTipoDePagamento] = useState('');
+  const [dataNota, setDataNota] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -77,6 +81,9 @@ const Pecas = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
+        data.append('tipoPagamento', tipoDePagamento);
+        data.append('dataNota', dataNota);
+
         await api.post('/peca', data);
         setLoading(false);
 
@@ -91,6 +98,8 @@ const Pecas = ({ history }) => {
         setVeiculo('');
         setPickerResponse(null);
         setPreview('');
+        setTipoDePagamento('');
+        setDataNota('');
       } catch (error) {
         console.log(error);
       }
@@ -106,6 +115,11 @@ const Pecas = ({ history }) => {
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
       setQuantidade(String(response.data.quantidade));
+
+      setTipoDePagamento(response.data.tipoPagamento);
+      setDataNota(
+        moment(response.data.createdAt).format('YYYY-MM-DD')
+      );
 
       setDesconto(
         inputValueMask(String(response.data.desconto) + '00')
@@ -161,7 +175,7 @@ const Pecas = ({ history }) => {
     }
 
     if (location.state) {
-      const { registerId: id } = location.state;
+      const {registerId: id} = location.state;
       setRegisterId(id);
     }
 
@@ -209,6 +223,10 @@ const Pecas = ({ history }) => {
           'total',
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
+
+      tipoDePagamento &&
+        data.append('tipoPagamento', tipoDePagamento);
+      dataNota && data.append('dataNota', dataNota);
 
       await api.put(`/peca/${registerId}`, data);
       setLoading(false);
@@ -308,6 +326,22 @@ const Pecas = ({ history }) => {
             />
           </div>
 
+          <SelectTypePayment
+            selectValue={(value) => setTipoDePagamento(value)}
+            value={tipoDePagamento}
+          />
+
+          <div className="box-input">
+            <label>Selecione um data</label>
+
+            <input
+              className="date"
+              onChange={(e) => setDataNota(e.target.value)}
+              value={dataNota}
+              type="date"
+            />
+          </div>
+
           <div className="box-input">
             <button className="fileSelect" onClick={selectFile}>
               Selecione uma imagem
@@ -330,7 +364,7 @@ const Pecas = ({ history }) => {
                   setPreview(URL.createObjectURL(e.target.files[0]));
                   setUri('');
                 }}
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 accept="image/*"
               />
 

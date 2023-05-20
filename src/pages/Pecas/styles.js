@@ -58,6 +58,11 @@ export const Content = styled.div`
       margin-bottom: 10px;
     }
 
+    input.date {
+      width: 300px;
+      padding-right: 15px;
+    }
+
     button {
       display: flex;
       align-items: center;
