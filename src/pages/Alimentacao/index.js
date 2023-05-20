@@ -220,6 +220,7 @@ const Alimentacao = ({history}) => {
               type="date"
             />
           </div>
+
           <div className="box-input">
             <button className="fileSelect" onClick={selectFile}>
               Selecione uma imagem

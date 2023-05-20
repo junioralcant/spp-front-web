@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -23,7 +23,7 @@ import {
 
 import HeaderList from '../../components/HeaderList';
 
-const DespesaExtraList = ({ history }) => {
+const DespesaExtraList = ({history}) => {
   const [search, setSearch] = useState(false);
   const [despesasExtras, setDespesasExtras] = useState([]);
 
@@ -189,6 +189,10 @@ const DespesaExtraList = ({ history }) => {
                     <div className="box-data">
                       <p className="foco"> Quantidade: </p>
                       <p>{despesaExtra.quantidade}</p>
+                    </div>
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{despesaExtra.tipoPagamento}</p>
                     </div>
                     <div className="box-data">
                       <p className="foco"> Total: </p>
