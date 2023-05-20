@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -20,10 +20,10 @@ import {
   Content,
 } from './styles';
 
-import HeaderList from '../../components/HeaderList';
 import HeaderTodasDespesas from '../../components/HeaderTodasDespesas';
+import {SelectTypePayment} from '../../components/SelectTypePayment';
 
-const TodasDespesasList = ({ history }) => {
+const TodasDespesasList = ({history}) => {
   const [search, setSearch] = useState(false);
   const [todasDespesas, setTodasDespesas] = useState([]);
   const [totals, setTotals] = useState([]);
@@ -31,6 +31,7 @@ const TodasDespesasList = ({ history }) => {
   const [dataIncio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [allDatas, setAllDatas] = useState('');
+  const [tipoDePagamento, setTipoDePagamento] = useState('');
 
   const [dataInicioChecks, setDataInicioChecks] = useState('');
   const [dataFimChecks, setDataFimChecks] = useState('');
@@ -41,13 +42,19 @@ const TodasDespesasList = ({ history }) => {
   useEffect(() => {
     async function loadDespesa() {
       const response = await api.get(
-        `/todasdespesas?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}&title=${title}`
+        `/todasdespesas?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&nomeLinha=${nomeLinha}&title=${title}&tipoPagamento=${tipoDePagamento}`
       );
       setTodasDespesas(response.data);
     }
 
     loadDespesa();
-  }, [dataFimChecks, dataInicioChecks, nomeLinha, title]);
+  }, [
+    dataFimChecks,
+    dataInicioChecks,
+    nomeLinha,
+    title,
+    tipoDePagamento,
+  ]);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -83,24 +90,6 @@ const TodasDespesasList = ({ history }) => {
     setSearch(false);
   }
 
-  async function deleteRegister(id) {
-    if (window.confirm(`Deseja realmente deletar esse registro?`))
-      try {
-        await api.delete(`/alimentacao/${id}`);
-        const response = await api.get('/todasdespesas');
-        setTodasDespesas(response.data);
-        alert('Registro deletado com sucesso!');
-      } catch (error) {
-        console.log(error);
-        alert('Problema ao deletar registro');
-      }
-  }
-
-  function editRegister(id) {
-    history.push('/alimentacao', {
-      registerId: id,
-    });
-  }
   let totalSaidas = 0;
   let totalSaldo = 0;
 
@@ -154,6 +143,12 @@ const TodasDespesasList = ({ history }) => {
             />
           </div>
 
+          <SelectTypePayment
+            selectValue={(value) => setTipoDePagamento(value)}
+            value={tipoDePagamento}
+            labelShow={false}
+          />
+
           <BoxInputsDate>
             <BoxInpuDate>
               <input
@@ -187,7 +182,7 @@ const TodasDespesasList = ({ history }) => {
               onClick={() => {
                 print();
               }}
-              style={{ marginLeft: 5 }}
+              style={{marginLeft: 5}}
             >
               <AiFillPrinter />
             </button>
@@ -224,6 +219,10 @@ const TodasDespesasList = ({ history }) => {
                     <div className="box-data">
                       <p className="foco"> Gasto com: </p>
                       <p>{despesa.title}</p>
+                    </div>
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{despesa.tipoPagamento}</p>
                     </div>
                     <div className="box-data">
                       <p className="foco"> Total: </p>

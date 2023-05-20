@@ -1,14 +1,19 @@
 import React from 'react';
 import {Select} from './styles';
 
-export function SelectTypePayment({selectValue, value}) {
+export function SelectTypePayment({
+  selectValue,
+  value,
+  labelShow = true,
+}) {
   function handleSelectTypePayment(value) {
     selectValue(value);
   }
 
   return (
     <Select className="box-input">
-      <label>Selecione</label>
+      {labelShow && <label>Selecione</label>}
+
       <select
         onChange={(e) => handleSelectTypePayment(e.target.value)}
         value={value}
