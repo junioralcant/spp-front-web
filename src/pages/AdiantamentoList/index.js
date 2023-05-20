@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -23,7 +23,7 @@ import {
 
 import HeaderList from '../../components/HeaderList';
 
-const Adiantamento = ({ history }) => {
+const Adiantamento = ({history}) => {
   const [search, setSearch] = useState(false);
   const [adiantamentos, setAdiantamentos] = useState([]);
 
@@ -98,7 +98,7 @@ const Adiantamento = ({ history }) => {
   return (
     <>
       <HeaderList
-        pageName="Listagem Adiantamento"
+        pageName="Listagem Adiantamento/Pagamento"
         total={total}
         register={adiantamentos.length}
       />
@@ -194,6 +194,10 @@ const Adiantamento = ({ history }) => {
                     <div className="box-data">
                       <p className="foco"> Colaborador: </p>
                       <p>{adiantamento.nomeColaborador}</p>
+                    </div>
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{adiantamento.tipoPagamento}</p>
                     </div>
                     <div className="box-data">
                       <p className="foco"> Total: </p>

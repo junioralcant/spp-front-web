@@ -1,18 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Compressor from 'compressorjs';
 
 import HeaderName from '../../components/HeaderName';
 import api from '../../services/api';
 
-import { Container, Content, Erro } from './styles';
+import {Container, Content, Erro} from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
 import Loader from '../../components/Loader';
+import {SelectTypePayment} from '../../components/SelectTypePayment';
+import moment from 'moment';
 
-const Adiantamento = ({ history }) => {
+const Adiantamento = ({history}) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
@@ -22,6 +24,8 @@ const Adiantamento = ({ history }) => {
   const [nomeLinha, setNomeLinha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
+  const [tipoDePagamento, setTipoDePagamento] = useState('');
+  const [dataNota, setDataNota] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -37,8 +41,10 @@ const Adiantamento = ({ history }) => {
   }
 
   async function register() {
-    if (!pickerResponse) {
-      setError('Selecione uma foto para continuar');
+    if (!pickerResponse || !tipoDePagamento || !dataNota) {
+      setError(
+        'Selecione uma foto para continuar ou um tipo de pagamento ou uma data.'
+      );
     } else {
       try {
         setError('');
@@ -49,6 +55,8 @@ const Adiantamento = ({ history }) => {
         data.append('file', pickerResponse);
 
         data.append('nomeColaborador', nome);
+        data.append('tipoPagamento', tipoDePagamento);
+        data.append('dataNota', dataNota);
         data.append('nomeLinha', nomeLinha);
         data.append('descricao', descricao);
         data.append(
@@ -66,11 +74,15 @@ const Adiantamento = ({ history }) => {
         setValor('');
         setPickerResponse(null);
         setPreview('');
+        setTipoDePagamento('');
+        setDataNota('');
       } catch (error) {
         console.log(error);
       }
     }
   }
+
+  console.log(dataNota);
 
   useEffect(() => {
     async function loadRegister() {
@@ -80,6 +92,10 @@ const Adiantamento = ({ history }) => {
       setNome(response.data.nomeColaborador);
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
+      setTipoDePagamento(response.data.tipoPagamento);
+      setDataNota(
+        moment(response.data.createdAt).format('YYYY-MM-DD')
+      );
 
       setValor(inputValueMask(String(response.data.total) + '00'));
       if (String(response.data.total).split('.')[1]) {
@@ -95,7 +111,7 @@ const Adiantamento = ({ history }) => {
     }
 
     if (location.state) {
-      const { registerId: id } = location.state;
+      const {registerId: id} = location.state;
       setRegisterId(id);
     }
 
@@ -111,6 +127,10 @@ const Adiantamento = ({ history }) => {
 
       pickerResponse && data.append('file', pickerResponse);
       nome && data.append('nomeColaborador', nome);
+      tipoDePagamento &&
+        data.append('tipoPagamento', tipoDePagamento);
+      dataNota && data.append('dataNota', dataNota);
+
       nomeLinha && data.append('nomeLinha', nomeLinha);
       descricao && data.append('descricao', descricao);
       valor &&
@@ -135,8 +155,8 @@ const Adiantamento = ({ history }) => {
       <HeaderName
         pageName={
           !registerId
-            ? 'Cadastrar Adiantamento'
-            : 'Alterar Adiantamento'
+            ? 'Cadastrar Adiantamento/Pagamento'
+            : 'Alterar Adiantamento/Pagamento'
         }
       />
       <Container>
@@ -178,6 +198,23 @@ const Adiantamento = ({ history }) => {
               }
             />
           </div>
+
+          <SelectTypePayment
+            selectValue={(value) => setTipoDePagamento(value)}
+            value={tipoDePagamento}
+          />
+
+          <div className="box-input">
+            <label>Selecione um data</label>
+
+            <input
+              className="date"
+              onChange={(e) => setDataNota(e.target.value)}
+              value={dataNota}
+              type="date"
+            />
+          </div>
+
           <div className="box-input">
             <button className="fileSelect" onClick={selectFile}>
               Selecione uma imagem
@@ -200,7 +237,7 @@ const Adiantamento = ({ history }) => {
                   setPreview(URL.createObjectURL(e.target.files[0]));
                   setUri('');
                 }}
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 accept="image/*"
               />
 

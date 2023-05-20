@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import HeaderHome from '../../components/HeaderHome';
 
-import { Container, Content } from './styles';
+import {Container, Content} from './styles';
 
-const Dashboard = ({ history }) => {
+const Dashboard = ({history}) => {
   const DATA = [
     {
-      title: 'Adiantamento',
+      title: 'Adiantamento/Pagamento',
       page: '/adiantamento',
     },
     {
@@ -60,7 +60,10 @@ const Dashboard = ({ history }) => {
       <Container>
         <Content>
           {DATA.map((data) => (
-            <button onClick={() => navigation(data.page, data.title)}>
+            <button
+              key={data.title}
+              onClick={() => navigation(data.page, data.title)}
+            >
               {data.title}
             </button>
           ))}
