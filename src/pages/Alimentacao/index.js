@@ -1,19 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {useState, useRef, useEffect} from 'react';
+import {useLocation} from 'react-router-dom';
 import Compressor from 'compressorjs';
 
 import HeaderName from '../../components/HeaderName';
 import api from '../../services/api';
 
-import { Container, Content, Erro } from './styles';
+import {Container, Content, Erro} from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
 import inputNumber from '../../components/inputNumber';
 
 import Loader from '../../components/Loader';
+import {SelectTypePayment} from '../../components/SelectTypePayment';
+import moment from 'moment';
 
-const Alimentacao = ({ history }) => {
+const Alimentacao = ({history}) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
@@ -23,6 +25,8 @@ const Alimentacao = ({ history }) => {
   const [nomeLinha, setNomeLinha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
+  const [tipoDePagamento, setTipoDePagamento] = useState('');
+  const [dataNota, setDataNota] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -57,6 +61,9 @@ const Alimentacao = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
+        data.append('tipoPagamento', tipoDePagamento);
+        data.append('dataNota', dataNota);
+
         await api.post('/alimentacao', data);
         setLoading(false);
 
@@ -81,6 +88,11 @@ const Alimentacao = ({ history }) => {
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
 
+      setTipoDePagamento(response.data.tipoPagamento);
+      setDataNota(
+        moment(response.data.createdAt).format('YYYY-MM-DD')
+      );
+
       setValor(inputValueMask(String(response.data.total) + '00'));
       if (String(response.data.total).split('.')[1]) {
         if (String(response.data.total).split('.')[1].length === 2) {
@@ -95,7 +107,7 @@ const Alimentacao = ({ history }) => {
     }
 
     if (location.state) {
-      const { registerId: id } = location.state;
+      const {registerId: id} = location.state;
       setRegisterId(id);
     }
 
@@ -124,6 +136,10 @@ const Alimentacao = ({ history }) => {
           'total',
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
+
+      tipoDePagamento &&
+        data.append('tipoPagamento', tipoDePagamento);
+      dataNota && data.append('dataNota', dataNota);
 
       await api.put(`/alimentacao/${registerId}`, data);
       alert('Registro alterado!');
@@ -186,6 +202,22 @@ const Alimentacao = ({ history }) => {
               }
             />
           </div>
+
+          <SelectTypePayment
+            selectValue={(value) => setTipoDePagamento(value)}
+            value={tipoDePagamento}
+          />
+
+          <div className="box-input">
+            <label>Selecione um data</label>
+
+            <input
+              className="date"
+              onChange={(e) => setDataNota(e.target.value)}
+              value={dataNota}
+              type="date"
+            />
+          </div>
           <div className="box-input">
             <button className="fileSelect" onClick={selectFile}>
               Selecione uma imagem
@@ -208,7 +240,7 @@ const Alimentacao = ({ history }) => {
                   setPreview(URL.createObjectURL(e.target.files[0]));
                   setUri('');
                 }}
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 accept="image/*"
               />
 

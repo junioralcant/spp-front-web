@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -23,7 +23,7 @@ import {
 
 import HeaderList from '../../components/HeaderList';
 
-const AlimentacaoList = ({ history }) => {
+const AlimentacaoList = ({history}) => {
   const [search, setSearch] = useState(false);
   const [alimentacoes, setAlimentacao] = useState([]);
 
@@ -185,6 +185,10 @@ const AlimentacaoList = ({ history }) => {
                     <div className="box-data">
                       <p className="foco"> Quantidade: </p>
                       <p>{alimentacao.quantidade}</p>
+                    </div>
+                    <div className="box-data">
+                      <p className="foco">Pagamento: </p>
+                      <p>{alimentacao.tipoPagamento}</p>
                     </div>
                     <div className="box-data">
                       <p className="foco"> Total: </p>
