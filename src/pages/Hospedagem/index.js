@@ -1,19 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Compressor from 'compressorjs';
 
 import HeaderName from '../../components/HeaderName';
 import api from '../../services/api';
 
-import { Container, Content, Erro } from './styles';
+import {Container, Content, Erro} from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
 import Loader from '../../components/Loader';
 import inputNumber from '../../components/inputNumber/index';
+import {SelectTypePayment} from '../../components/SelectTypePayment';
+import moment from 'moment';
 
-const Hospedagem = ({ history }) => {
+const Hospedagem = ({history}) => {
   const location = useLocation();
 
   const [registerId, setRegisterId] = useState('');
@@ -25,6 +27,8 @@ const Hospedagem = ({ history }) => {
   const [valor, setValor] = useState('');
   const [diarias, setDiarias] = useState('');
   const [valorUnitario, setValorUnitario] = useState('');
+  const [tipoDePagamento, setTipoDePagamento] = useState('');
+  const [dataNota, setDataNota] = useState('');
 
   const [preview, setPreview] = useState('');
   const [uri, setUri] = useState('');
@@ -67,6 +71,9 @@ const Hospedagem = ({ history }) => {
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
 
+        data.append('tipoPagamento', tipoDePagamento);
+        data.append('dataNota', dataNota);
+
         await api.post('/hospedagem', data);
         setLoading(false);
 
@@ -79,6 +86,8 @@ const Hospedagem = ({ history }) => {
         setValor('');
         setPickerResponse(null);
         setPreview('');
+        setTipoDePagamento('');
+        setDataNota('');
       } catch (error) {
         console.log(error);
       }
@@ -93,6 +102,11 @@ const Hospedagem = ({ history }) => {
       setNomeLinha(response.data.nomeLinha);
       setDescricao(response.data.descricao);
       setDiarias(String(response.data.diarias));
+
+      setTipoDePagamento(response.data.tipoPagamento);
+      setDataNota(
+        moment(response.data.createdAt).format('YYYY-MM-DD')
+      );
 
       setValorUnitario(
         inputValueMask(String(response.data.valorUnitario) + '00')
@@ -130,7 +144,7 @@ const Hospedagem = ({ history }) => {
     }
 
     if (location.state) {
-      const { registerId: id } = location.state;
+      const {registerId: id} = location.state;
       setRegisterId(id);
     }
 
@@ -165,6 +179,10 @@ const Hospedagem = ({ history }) => {
           'total',
           valor.replace('R$ ', '').replace('.', '').replace(',', '.')
         );
+
+      tipoDePagamento &&
+        data.append('tipoPagamento', tipoDePagamento);
+      dataNota && data.append('dataNota', dataNota);
 
       await api.put(`/hospedagem/${registerId}`, data);
       setLoading(false);
@@ -246,6 +264,22 @@ const Hospedagem = ({ history }) => {
             />
           </div>
 
+          <SelectTypePayment
+            selectValue={(value) => setTipoDePagamento(value)}
+            value={tipoDePagamento}
+          />
+
+          <div className="box-input">
+            <label>Selecione um data</label>
+
+            <input
+              className="date"
+              onChange={(e) => setDataNota(e.target.value)}
+              value={dataNota}
+              type="date"
+            />
+          </div>
+
           <div className="box-input">
             <button className="fileSelect" onClick={selectFile}>
               Selecione uma imagem
@@ -268,7 +302,7 @@ const Hospedagem = ({ history }) => {
                   setPreview(URL.createObjectURL(e.target.files[0]));
                   setUri('');
                 }}
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 accept="image/*"
               />
 
