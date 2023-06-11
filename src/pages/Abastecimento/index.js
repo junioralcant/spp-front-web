@@ -8,10 +8,11 @@ import api from '../../services/api';
 
 import {Container, Content, Erro} from './styles';
 
-import inputValueMask from '../../components/inputValueMask';
+import inputValueMask, {
+  inputValueMaskLiters,
+} from '../../components/inputValueMask';
 
 import Loader from '../../components/Loader';
-import inputNumber from '../../components/inputNumber/index';
 import {SelectTypePayment} from '../../components/SelectTypePayment';
 import moment from 'moment';
 
@@ -229,7 +230,9 @@ const Abastecimento = ({history}) => {
             <input
               placeholder="Litros"
               value={litros}
-              onChange={(e) => setLitros(inputNumber(e.target.value))}
+              onChange={(e) =>
+                setLitros(inputValueMaskLiters(e.target.value))
+              }
             />
           </div>
 
