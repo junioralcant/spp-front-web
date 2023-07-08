@@ -6,7 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import { isAuthenticated } from './services/auth';
+import {isAuthenticated} from './services/auth';
 
 import Dashboard from './pages/Dashboard';
 import SignIn from './pages/SignIn';
@@ -38,8 +38,9 @@ import AlterarSaldo from './pages/AlterarSaldo';
 import AlterarSaldoList from './pages/AlterarSaldoList';
 
 import Print from './pages/Print';
+import PrintEntradas from './pages/PrintEntradas';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({component: Component, ...rest}) => (
   <Route
     {...rest}
     render={(props) =>
@@ -49,7 +50,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         <Redirect
           to={{
             pathname: `/signin`,
-            state: { from: props.location },
+            state: {from: props.location},
           }}
         />
       )
@@ -151,6 +152,12 @@ const Routes = () => (
       />
 
       <PrivateRoute exact path="/print" component={Print} />
+
+      <PrivateRoute
+        exact
+        path="/print-entradas"
+        component={PrintEntradas}
+      />
 
       <Route
         path="*"

@@ -7,11 +7,9 @@ import {Container, Content, Table} from './styles';
 import logo from '../../assets/LOGO.png';
 import moment from 'moment';
 
-const Print = () => {
+const PrintEntradas = () => {
   const location = useLocation();
-
-  const {todasDespesas, totalSaidas, totalSaldo, resumo} =
-    location.state;
+  const {saldos, total} = location.state;
 
   useEffect(() => {
     setTimeout(() => window.print(), 800);
@@ -23,29 +21,15 @@ const Print = () => {
         <div className="header">
           <img src={logo} />
           <div className="data">
-            <span>Registros: {todasDespesas.length}</span>
             <span>
-              Caixa:{' '}
-              {String(
-                totalSaldo.toLocaleString('pt-br', {
-                  style: 'currency',
-                  currency: 'BRL',
-                })
-              )}
+              Registros:
+              {saldos.length}
             </span>
+
             <span>
-              Saidas:{' '}
+              Total:{' '}
               {String(
-                totalSaidas.toLocaleString('pt-br', {
-                  style: 'currency',
-                  currency: 'BRL',
-                })
-              )}
-            </span>
-            <span>
-              Saldo:{' '}
-              {String(
-                resumo.toLocaleString('pt-br', {
+                total.toLocaleString('pt-br', {
                   style: 'currency',
                   currency: 'BRL',
                 })
@@ -58,19 +42,16 @@ const Print = () => {
             <tr>
               <th>#</th>
               <th>Data</th>
-              <th>Linha</th>
-              <th>Gasto com</th>
+              <th>Para</th>
               <th>Valor</th>
-              <th>Descrição</th>
             </tr>
           </thead>
           <tbody>
-            {todasDespesas.map((item, index) => (
+            {saldos.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
                 <td>{moment(item.createdAt).format('DD-MM-YYYY')}</td>
-                <td>{item.nomeLinha}</td>
-                <td>{item.title}</td>
+                <td>{item.userCreate.name}</td>
                 <td>
                   {item.total &&
                     String(
@@ -80,7 +61,6 @@ const Print = () => {
                       })
                     )}
                 </td>
-                <td>{item.descricao}</td>
               </tr>
             ))}
           </tbody>
@@ -90,4 +70,4 @@ const Print = () => {
   );
 };
 
-export default Print;
+export default PrintEntradas;

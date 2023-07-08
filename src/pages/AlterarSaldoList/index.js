@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 import moment from 'moment';
 
 import api from '../../services/api';
@@ -8,6 +8,7 @@ import {
   AiOutlineSearch,
   AiOutlineDelete,
   AiOutlineCloseCircle,
+  AiFillPrinter,
 } from 'react-icons/ai';
 
 import {
@@ -22,7 +23,7 @@ import {
 
 import HeaderList from '../../components/HeaderList';
 
-const AlterarSaldoList = ({ history }) => {
+const AlterarSaldoList = ({history}) => {
   const [search, setSearch] = useState(false);
   const [saldos, setSaldos] = useState([]);
 
@@ -33,19 +34,18 @@ const AlterarSaldoList = ({ history }) => {
   const [dataFimChecks, setDataFimChecks] = useState('');
 
   const [descricao, setDescricao] = useState('');
+  const [nome, setNome] = useState('');
 
   useEffect(() => {
     async function loadSaldos() {
       const response = await api.get(
-        `/saldo?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&descricao=${descricao}`
+        `/saldo?dataIncio=${dataInicioChecks}&dataFim=${dataFimChecks}&descricao=${descricao}&name=${nome}`
       );
       setSaldos(response.data);
     }
 
     loadSaldos();
-  }, [dataFimChecks, dataInicioChecks, descricao]);
-
-  console.log(descricao);
+  }, [dataFimChecks, dataInicioChecks, descricao, nome]);
 
   function checksDates() {
     if (dataIncio.length !== 10 || dataFim.length !== 10) {
@@ -57,6 +57,8 @@ const AlterarSaldoList = ({ history }) => {
 
     setSearch(true);
   }
+
+  console.log(saldos);
 
   function coloseSearch() {
     setDataFim('');
@@ -90,6 +92,13 @@ const AlterarSaldoList = ({ history }) => {
     }
   });
 
+  function print() {
+    history.push('/print-entradas', {
+      saldos,
+      total,
+    });
+  }
+
   return (
     <>
       <HeaderList
@@ -104,6 +113,12 @@ const AlterarSaldoList = ({ history }) => {
               placeholder="Buscar por descrição"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
+            />
+
+            <input
+              placeholder="Buscar por nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
             />
           </div>
 
@@ -133,6 +148,16 @@ const AlterarSaldoList = ({ history }) => {
               }}
             >
               <AiOutlineSearch />
+            </button>
+
+            <button
+              className="search"
+              onClick={() => {
+                print();
+              }}
+              style={{marginLeft: 5}}
+            >
+              <AiFillPrinter />
             </button>
 
             {search && (
