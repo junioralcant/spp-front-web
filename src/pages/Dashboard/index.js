@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import HeaderHome from '../../components/HeaderHome';
 
 import {Container, Content} from './styles';
@@ -32,6 +32,10 @@ const Dashboard = ({history}) => {
     {
       title: 'Roço',
       page: '/roco',
+    },
+    {
+      title: 'Serviço',
+      page: '/servico',
     },
     {
       title: 'Todas Despesas',

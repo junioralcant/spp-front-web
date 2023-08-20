@@ -39,6 +39,7 @@ import AlterarSaldoList from './pages/AlterarSaldoList';
 
 import Print from './pages/Print';
 import PrintEntradas from './pages/PrintEntradas';
+import Servico from './pages/Servico';
 
 const PrivateRoute = ({component: Component, ...rest}) => (
   <Route
@@ -75,6 +76,8 @@ const Routes = () => (
         path="/adiantamento"
         component={Adiantamento}
       />
+
+      <PrivateRoute exact path="/servico" component={Servico} />
 
       <PrivateRoute
         exact
