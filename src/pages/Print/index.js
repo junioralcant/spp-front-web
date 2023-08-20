@@ -21,7 +21,7 @@ const Print = () => {
     <Container>
       <Content>
         <div className="header">
-          <img src={logo} />
+          <img src={logo} alt="Logo" />
           <div className="data">
             <span>Registros: {todasDespesas.length}</span>
             <span>

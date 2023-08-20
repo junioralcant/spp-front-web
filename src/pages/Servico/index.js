@@ -9,8 +9,6 @@ import {Container, Content, Erro} from './styles';
 
 import inputValueMask from '../../components/inputValueMask';
 
-import inputNumber from '../../components/inputNumber';
-
 import Loader from '../../components/Loader';
 import {SelectTypePayment} from '../../components/SelectTypePayment';
 import moment from 'moment';

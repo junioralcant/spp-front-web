@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { Container, Content } from './styles';
+import {Container, Content} from './styles';
 
 const HeaderTodasDespesas = ({
   namePage,

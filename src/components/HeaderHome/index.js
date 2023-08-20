@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 import {AiOutlineUser} from 'react-icons/ai';
 
-import {Container, Button, Content, Column, Girl} from './styles';
+import {Container, Content} from './styles';
 
 import {getUser} from '../../services/auth';
 

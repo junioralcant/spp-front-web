@@ -241,6 +241,7 @@ const TodasDespesasList = ({history}) => {
                       <img
                         className="image-content"
                         src={despesa.imagem.url}
+                        alt="Logo"
                       />
                     </a>
                   )}
